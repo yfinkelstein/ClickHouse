@@ -285,7 +285,7 @@ private:
     alignas(Alignment) char stack_memory[_initial_bytes];
 
 public:
-    static constexpr size_t initial_bytes = initial_bytes;
+    static constexpr size_t initial_bytes = _initial_bytes;
 
     /// Do not use boost::noncopyable to avoid the warning about direct base
     /// being inaccessible due to ambiguity, when derived classes are also
