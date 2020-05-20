@@ -15,7 +15,7 @@
 #include "boost/functional/hash.hpp"
 #include <Columns/ColumnsNumber.h>
 #include <Core/Types.h>
-#include <common/Types.h>
+#include <common/types.h>
 
 
 namespace DB
@@ -55,7 +55,7 @@ public:
 
     size_t getNumberOfArguments() const override { return 0; }
 
-    bool isInjective(const Block &) override { return false; }
+    bool isInjective(const Block &) const override { return false; }
 
     bool useDefaultImplementationForConstants() const override { return true; }
 
@@ -190,7 +190,7 @@ public:
 
     size_t getNumberOfArguments() const override { return 0; }
 
-    bool isInjective(const Block &) override { return false; }
+    bool isInjective(const Block &) const override { return false; }
 
     bool useDefaultImplementationForConstants() const override { return true; }
 
