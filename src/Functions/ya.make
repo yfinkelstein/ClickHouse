@@ -280,7 +280,7 @@ SRCS(
     notEquals.cpp
     now.cpp
     now64.cpp
-    nucolumnarConsistentHash.cpp
+    NuColumnarConsistentHash.cpp
     nullIf.cpp
     pi.cpp
     plus.cpp
