@@ -16,6 +16,7 @@
 #include <Columns/ColumnsNumber.h>
 #include <Core/Types.h>
 #include <common/types.h>
+#include <Columns/ColumnConst.h>
 
 
 namespace DB
@@ -76,21 +77,24 @@ public:
      **/
     void executeImpl(Block & block, const ColumnNumbers & arguments, size_t result, size_t ) override
     {
+        LOG_DEBUG(log, "checking all arguments for NuColumnConsistentHash");
         // argument 'table'
-        // auto& table_arg = arguments[0];
-        // const IDataType * table_arg_type = block.getByPosition(table_arg).type.get();
-        // // assert type for argument 'table' is String
-        // if(table_arg_type->getTypeId() != TypeIndex::String){
-        //     LOG_ERROR(log, "NuColumnarConsistentHash function's first argument must be 'table' with 'String' type");
-        //     throw Exception("NuColumnarConsistentHash function's first argument 'table' is not 'String' type", ErrorCodes::ILLEGAL_COLUMN);
-        // }
-        // const IColumn * table_col = block.getByPosition(table_arg).column.get();
-        // const auto* table_col_val = checkAndGetColumn<ColumnString>(table_col); 
-        // std::string table = table_col_val->getDataAt(1).toString();
-        // LOG_DEBUG(log, "column 0: name=" << table_col->getName() << ", type=String" << ", value=" << table);
+        auto& table_arg = arguments[0];
+        const IDataType * table_arg_type = block.getByPosition(table_arg).type.get();
+        // assert type for argument 'table' is String
+        if(table_arg_type->getTypeId() != TypeIndex::String){
+            LOG_ERROR(log, "NuColumnarConsistentHash function's first argument must be 'table' with 'String' type");
+            throw Exception("NuColumnarConsistentHash function's first argument 'table' is not 'String' type", ErrorCodes::ILLEGAL_COLUMN);
+        }
+        const IColumn * table_col = block.getByPosition(table_arg).column.get();
+        const ColumnString * table_col_string = checkAndGetColumn<ColumnString>(table_col);
+        const ColumnConst * table_col_const_string = checkAndGetColumnConst<ColumnString>(table_col);
+        std::string table = table_col_string ? table_col_string->getDataAt(0).toString() : table_col_const_string->getDataAt(0).toString();
+        
+        LOG_DEBUG(log, "column 0: name=" << table_col->getName() << ", type=String" << ", value=" << table);
 
         // argument 'date'
-        auto& date_arg = arguments[0];
+        auto& date_arg = arguments[1];
         const IDataType * date_arg_type = block.getByPosition(date_arg).type.get();        
         // assert type for argument 'date' is Date
         if (date_arg_type->getTypeId() != TypeIndex::UInt32){
@@ -102,7 +106,7 @@ public:
         LOG_DEBUG(log, "column 1" << ": name=" << date_col->getName() << ", type=Date" << ", value=" << date_col_val->getElement(0));
 
         // argument "range_id"
-        auto& rangeid_arg = arguments[1];
+        auto& rangeid_arg = arguments[2];
         const IDataType * rangeid_arg_type = block.getByPosition(rangeid_arg).type.get();        
         // assert type for argument 'range_id' is UInt32
         if (rangeid_arg_type->getTypeId() != TypeIndex::UInt32){
@@ -128,7 +132,7 @@ public:
 
         // UInt32 shard = lookupShard(table, date_col_val->getElement(0), rangeid_col_val->getElement(0), activever);
 
-        UInt32 shard = lookupShard("ads", date_col_val->getElement(0), rangeid_col_val->getElement(0), "1");
+        UInt32 shard = lookupShard(table, date_col_val->getElement(0), rangeid_col_val->getElement(0), "1");
         
         auto c_res = ColumnUInt32::create();
         auto & data = c_res->getData();
@@ -255,7 +259,7 @@ public:
                 case TypeIndex::String:
                 {
                     const ColumnString* val = checkAndGetColumn<ColumnString>(c);
-                    std::string v_str = val->getDataAt(1).toString();
+                    std::string v_str = val->getDataAt(0).toString();
                     LOG_DEBUG(log, "Column " << i  << ": name=" << c->getName() << ", type=" << getTypeName(which.idx) << ", value=" << v_str << ", hash=" << seed);
                     boost::hash_combine(seed, v_str);
                     break;
