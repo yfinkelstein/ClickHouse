@@ -128,7 +128,7 @@ public:
 
         // UInt32 shard = lookupShard(table, date_col_val->getElement(0), rangeid_col_val->getElement(0), activever);
 
-        UInt32 shard = lookupShard("ads", date_col_val->getElement(0), 1, "1");
+        UInt32 shard = lookupShard("ads", date_col_val->getElement(0), rangeid_col_val->getElement(0), "1");
         
         auto c_res = ColumnUInt32::create();
         auto & data = c_res->getData();
@@ -139,8 +139,8 @@ private:
     std::unordered_map<std::string, UInt32> getShardingMap(){
         return 
         {
-            {"ads_20200508_1_1", 0},
-            {"ads_20200509_1_1", 1}
+            {"ads_20200508_0_1", 0},
+            {"ads_20200509_8_1", 1}
         };
     }
 
