@@ -16,6 +16,9 @@
 #include <Processors/Sources/SourceFromInputStream.h>
 #include <Processors/Executors/TreeExecutorBlockInputStream.h>
 
+#include <Interpreters/ExternalDictionariesLoader.h>
+#include <Dictionaries/ComplexKeyHashedDictionary.h>
+
 namespace ProfileEvents
 {
     extern const Event DistributedConnectionMissingTable;
@@ -151,12 +154,15 @@ void SelectStreamFactory::createForShard(
         VirtualColumnUtils::rewriteEntityInAst(modified_query_ast, "_shard_num", shard_info.shard_num, "toUInt32");
 
 
-    // test rewrite the query to have with clause "WITH '123' AS _shard_map_version"
-    // where '123' is the global version, should be read from dictionary
-    if(true){ // fixme, only when there is some hint or always rewrite the query?
-        // read version from dictionary
-        std::string shard_map_ver = "123";
-        VirtualColumnUtils::rewriteEntityInAst(modified_query_ast, "_shard_map_version", shard_map_ver);
+    // rewrite query with active version for snapshot query if needed
+    {
+        auto foundShardVer = findSnapshotQueryActiveVersionIfExists(context, query_ast);
+        if(foundShardVer){
+            LOG_DEBUG(&Logger::get("ClusterProxy::SelectStreamFactory"), "found active version: " << *foundShardVer);
+            VirtualColumnUtils::rewriteEntityInAst(modified_query_ast, "_sharding_ver", *foundShardVer);
+        }else{
+            LOG_DEBUG(&Logger::get("ClusterProxy::SelectStreamFactory"), "No active version found");
+        }
     }
 
     auto emplace_local_stream = [&]()
@@ -339,6 +345,74 @@ void SelectStreamFactory::createForShard(
     }
     else
         emplace_remote_stream();
+}
+
+
+std::optional<std::string> SelectStreamFactory::findSnapshotQueryActiveVersionIfExists(const Context & context, const ASTPtr & query_ast){
+    const ASTSelectQuery & select = query_ast->as<ASTSelectQuery &>();
+    if (!select.tables())
+        return std::nullopt;
+
+    const auto & tables_in_select_query = select.tables()->as<ASTTablesInSelectQuery &>();
+    if (tables_in_select_query.children.empty())
+        return std::nullopt;
+
+    const auto & tables_element = tables_in_select_query.children[0]->as<ASTTablesInSelectQueryElement &>();
+    if (!tables_element.table_expression)
+        return std::nullopt;
+
+    const auto& table_expr = tables_element.table_expression->as<ASTTableExpression>();
+    if(!table_expr->database_and_table_name)
+        return std::nullopt;
+
+    const auto& db_table = table_expr->database_and_table_name->as<ASTIdentifier>();
+    std::string db_table_name = db_table->name;
+
+    std::shared_ptr<const IDictionaryBase> partition_ver_dict;
+    try{
+        const ExternalDictionariesLoader & dictionaries_loader = context.getExternalDictionariesLoader();
+        partition_ver_dict = dictionaries_loader.getDictionary("default.partition_map_dict");
+    }catch(const DB::Exception& ex){
+        LOG_DEBUG(&Logger::get("ClusterProxy::SelectStreamFactory"), << ex.what());
+        return std::nullopt;
+    }
+
+    const IDictionaryBase * dict_ptr = partition_ver_dict.get();
+    const auto dict = typeid_cast<const ComplexKeyHashedDictionary *>(dict_ptr);
+    if (!dict)
+        return std::nullopt;
+
+    Columns key_columns;
+    DataTypes key_types;
+
+    // column 'table'
+    auto key_tablename = ColumnString::create();
+    key_tablename->insert(db_table_name);
+    ColumnString::Ptr immutable_ptr_key_tablename = std::move(key_tablename);
+    key_columns.push_back(immutable_ptr_key_tablename);
+    key_types.push_back(std::make_shared<DataTypeString>());
+
+    // column 'date'
+    auto key_date = ColumnString::create();
+    key_date->insert("00000000");
+    ColumnString::Ptr immutable_ptr_key_date = std::move(key_date);
+    key_columns.push_back(immutable_ptr_key_date);
+    key_types.push_back(std::make_shared<DataTypeString>());
+
+    // column 'range_id'
+    auto key_rangeid = ColumnUInt32::create();
+    key_rangeid->insert(0);
+    ColumnUInt32::Ptr immutable_ptr_key_rangeid = std::move(key_rangeid);
+    key_columns.push_back(immutable_ptr_key_rangeid);
+    key_types.push_back(std::make_shared<DataTypeUInt32>());
+
+    // column 'active_ver'
+    auto out = ColumnString::create();
+    String attr_name = "active_ver";    
+    dict->getString(attr_name, key_columns, key_types, out.get());
+    std::string active_ver = out->getDataAt(0).toString();
+
+    return std::optional<std::string>(active_ver);
 }
 
 }
