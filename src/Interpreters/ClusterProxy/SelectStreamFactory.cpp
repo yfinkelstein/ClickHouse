@@ -150,6 +150,15 @@ void SelectStreamFactory::createForShard(
     if (has_virtual_shard_num_column)
         VirtualColumnUtils::rewriteEntityInAst(modified_query_ast, "_shard_num", shard_info.shard_num, "toUInt32");
 
+
+    // test rewrite the query to have with clause "WITH '123' AS _shard_map_version"
+    // where '123' is the global version, should be read from dictionary
+    if(true){ // fixme, only when there is some hint or always rewrite the query?
+        // read version from dictionary
+        std::string shard_map_ver = "123";
+        VirtualColumnUtils::rewriteEntityInAst(modified_query_ast, "_shard_map_version", shard_map_ver);
+    }
+
     auto emplace_local_stream = [&]()
     {
         res.emplace_back(createLocalStream(modified_query_ast, header, context, processed_stage,
