@@ -50,7 +50,7 @@ Context removeUserRestrictionsFromSettings(const Context & context, const Settin
  * 1) query does not match sharding_key expression NuColumnarConsistentHash, so activeVerCol is not preset
  * 2) query is not for tables with sharding_key expression NuColumnarConsistentHash
  * 
- * This could be an expensive operation because it parses the query and read from dictionary, we should have a flag to explictly
+ * This could be an expensive operation because it parses the query and read from dictionary, we should have a flag to explicitly
  * tell if we really need perform a version check.
  * 
  **/ 
