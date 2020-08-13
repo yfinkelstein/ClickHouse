@@ -18,7 +18,10 @@ SRCS(
     ActionsVisitor.cpp
     addMissingDefaults.cpp
     addTypeConversionToAST.cpp
+    AggregateDescription.cpp
     Aggregator.cpp
+    ArithmeticOperationsInAgrFuncOptimize.cpp
+    ArithmeticOperationsInAgrFuncOptimize.h
     ArrayJoinAction.cpp
     AsynchronousMetrics.cpp
     BloomFilter.cpp
@@ -57,6 +60,7 @@ SRCS(
     HashJoin.cpp
     IdentifierSemantic.cpp
     IExternalLoadable.cpp
+    RemoveInjectiveFunctionsVisitor.cpp
     InJoinSubqueriesPreprocessor.cpp
     inplaceBlockConversions.cpp
     InternalTextLogsQueue.cpp
@@ -83,12 +87,13 @@ SRCS(
     InterpreterSelectWithUnionQuery.cpp
     InterpreterSetQuery.cpp
     InterpreterSetRoleQuery.cpp
+    InterpreterShowAccessQuery.cpp
+    InterpreterShowAccessEntitiesQuery.cpp
     InterpreterShowCreateAccessEntityQuery.cpp
     InterpreterShowCreateQuery.cpp
     InterpreterShowGrantsQuery.cpp
+    InterpreterShowPrivilegesQuery.cpp
     InterpreterShowProcesslistQuery.cpp
-    InterpreterShowQuotasQuery.cpp
-    InterpreterShowRowPoliciesQuery.cpp
     InterpreterShowTablesQuery.cpp
     InterpreterSystemQuery.cpp
     InterpreterUseQuery.cpp
@@ -103,6 +108,7 @@ SRCS(
     MarkTableIdentifiersVisitor.cpp
     MergeJoin.cpp
     MetricLog.cpp
+    AsynchronousMetricLog.cpp
     MutationsInterpreter.cpp
     NullableUtils.cpp
     OptimizeIfChains.cpp
@@ -120,10 +126,12 @@ SRCS(
     ReplaceQueryParameterVisitor.cpp
     RequiredSourceColumnsData.cpp
     RequiredSourceColumnsVisitor.cpp
+    RewriteAnyFunctionVisitor.cpp
     RowRefs.cpp
     Set.cpp
     SetVariants.cpp
     sortBlock.cpp
+    SortedBlocksWriter.cpp
     StorageID.cpp
     SubqueryForSet.cpp
     SyntaxAnalyzer.cpp
