@@ -294,13 +294,7 @@ StorageDistributed::StorageDistributed(
     const String & storage_policy_,
     const String & relative_data_path_,
     bool attach_)
-    : IStorage(id_,
-               ColumnsDescription(
-                   {
-                       {"_shard_num", std::make_shared<DataTypeUInt32>()},
-                       {"_sharding_ver", std::make_shared<DataTypeString>()},
-                   },
-               true))
+    : IStorage(id_)
     , remote_database(remote_database_)
     , remote_table(remote_table_)
     , global_context(std::make_unique<Context>(context_))

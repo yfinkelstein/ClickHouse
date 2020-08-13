@@ -229,7 +229,7 @@ public:
         std::size_t combinedHash = concatenatedHash(block, arguments);
         // print hash ranges
         for(auto it = hash_ranges.begin(); it != hash_ranges.end(); ++it){
-            LOG_DEBUG(log, "hash range: " << *it);
+            LOG_DEBUG(log, "hash range: {}", *it);
         }
         auto found = std::lower_bound(hash_ranges.begin(), hash_ranges.end(), combinedHash);
         std::size_t bucketIdx = found-hash_ranges.begin()+1;

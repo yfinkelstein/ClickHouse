@@ -32,12 +32,12 @@ IColumn::Selector createBlockSelector(
       * It is not near like remainder of division, but is suitable for our task.
       */
     using UnsignedT = std::make_unsigned_t<T>;
-    Logger * log = &Logger::get("createBlockSelector");
+    Poco::Logger * log = &Poco::Logger::get("createBlockSelector");
     /// const columns contain only one value, therefore we do not need to read it at every iteration
     if (isColumnConst(column))
     {
         const auto data = assert_cast<const ColumnConst &>(column).getValue<T>();
-        LOG_DEBUG(log, "###data value: " << static_cast<UnsignedT>(data));
+        LOG_DEBUG(log, "###data value: %s", static_cast<UnsignedT>(data));
 
         const auto shard_num = slots[static_cast<UnsignedT>(data) % total_weight];
         selector.assign(num_rows, shard_num);

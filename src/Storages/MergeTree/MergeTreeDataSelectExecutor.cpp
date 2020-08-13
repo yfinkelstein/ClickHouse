@@ -236,7 +236,7 @@ bool MergeTreeDataSelectExecutor::shouldSkipPartition(const Context & context, c
     Macros::MacroMap mm = macros->getMacroMap();
     auto foundShard = mm.find("shard");
     if(foundShard != mm.end()){
-        LOG_DEBUG(log, "shard id found from Macros: " << foundShard->second);    
+        LOG_DEBUG(log, "shard id found from Macros: {}", foundShard->second);    
     }else{
         LOG_DEBUG(log, "shard id not found in Macros");
         return false;
@@ -417,9 +417,9 @@ Pipes MergeTreeDataSelectExecutor::readFromParts(
             // skip partitions which are not required by current global version
             if(requiredPartitionVer){
                 std::string partitionId = part->info.partition_id;
-                LOG_DEBUG(log, "Examining part: " << part->name << " of partition : " << partitionId);
+                LOG_DEBUG(log, "Examining part: " << part->name << " of partition : {}", partitionId);
                 if(shouldSkipPartition(context, (*requiredPartitionVer).first, (*requiredPartitionVer).second, partitionId)){
-                    LOG_DEBUG(log, "Skipping part: " << part->name << " of partition : " << partitionId);
+                    LOG_DEBUG(log, "Skipping part: " << part->name << " of partition : {}", partitionId);
                     continue;
                 }
             } 

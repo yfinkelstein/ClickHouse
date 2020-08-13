@@ -344,7 +344,7 @@ void ThreadStatus::logToQueryThreadLog(QueryThreadLog & thread_log)
 // @resharding-support
 void ThreadStatus::setActiveVerColumn(const std::string& activeVerCol){
     if(query_context){
-        LOG_DEBUG(log, "set active version column to query_context: " << activeVerCol);
+        LOG_DEBUG(log, "set active version column to query_context: %s", activeVerCol.c_str());
         query_context->setActiveVerColumn(activeVerCol);
     }
 }

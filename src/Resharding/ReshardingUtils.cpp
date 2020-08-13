@@ -74,14 +74,14 @@ std::optional<UInt32> ReshardingUtils::findShardIfExists(const ExternalDictionar
     try{
         partition_ver_dict = dictionaries_loader.getDictionary(_SHARDING_VERSION_DICTIONARY);
     }catch(const DB::Exception& ex){
-        LOG_DEBUG(&Logger::get("ReshardingUtils"), ex.what() << ", " << getDebugContext());
+        LOG_DEBUG(&Poco::Logger::get("ReshardingUtils"), ex.what(), ", ", getDebugContext());
         return std::nullopt;
     }
 
     const IDictionaryBase * dict_ptr = partition_ver_dict.get();
     const auto dict = typeid_cast<const ComplexKeyHashedDictionary *>(dict_ptr);
     if (!dict){
-        LOG_DEBUG(&Logger::get("ReshardingUtils"), "ComplexKeyHashedDictionary not found: " << getDebugContext());
+        LOG_DEBUG(&Poco::Logger::get("ReshardingUtils"), "ComplexKeyHashedDictionary not found: {}", getDebugContext());
         return std::nullopt;
     }
 

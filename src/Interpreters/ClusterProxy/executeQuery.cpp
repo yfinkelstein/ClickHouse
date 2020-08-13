@@ -141,8 +141,6 @@ Pipes executeQuery(
 
     Pipes res;
 
-    const std::string query = queryToString(query_ast);
-
     Context new_context = removeUserRestrictionsFromSettings(context, settings, log);
 
     ThrottlerPtr user_level_throttler;
@@ -165,10 +163,10 @@ Pipes executeQuery(
     //@resharding-support: rewrite query with active version for snapshot query if needed
     auto foundVer = findActiveVerColumnIfExists(context, query_ast);
     if(foundVer){
-        LOG_DEBUG(&Logger::get("ClusterProxy::executeQuery"), "found active sharding version: " << *foundVer);
+        LOG_DEBUG(&Poco::Logger::get("ClusterProxy::executeQuery"), "found active sharding version: {}", *foundVer);
         VirtualColumnUtils::rewriteEntityInAst(query_ast, "_sharding_ver", *foundVer);
     }else{
-        LOG_DEBUG(&Logger::get("ClusterProxy::executeQuery"), "not found active sharding version");
+        LOG_DEBUG(&Poco::Logger::get("ClusterProxy::executeQuery"), "not found active sharding version");
     }
 
     const std::string query = queryToString(query_ast);
