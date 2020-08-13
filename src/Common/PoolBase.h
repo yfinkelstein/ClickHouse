@@ -131,6 +131,32 @@ public:
         }
     }
 
+    bool isAllFree()
+    {
+        std::unique_lock lock(mutex);
+        for (auto & item : items)
+        {
+            if (item->in_use)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool isAllFree()
+    {
+        std::unique_lock lock(mutex);
+        for (auto & item : items)
+        {
+            if (item->in_use)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     void reserve(size_t count)
     {
         std::lock_guard lock(mutex);
