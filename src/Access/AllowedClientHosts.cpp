@@ -314,10 +314,4 @@ bool AllowedClientHosts::contains(const IPAddress & client_address) const
     return false;
 }
 
-void AllowedClientHosts::dropDNSCaches()
-{
-    getIsAddressOfHostCache().drop();
-    getHostByAddressCache().drop();
-}
-
 }
