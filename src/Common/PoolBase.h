@@ -1,20 +1,20 @@
 #pragma once
 
-#include <mutex>
 #include <condition_variable>
-#include <Poco/Timespan.h>
+#include <mutex>
 #include <boost/noncopyable.hpp>
+#include <Poco/Timespan.h>
 
-#include <common/logger_useful.h>
 #include <Common/Exception.h>
+#include <common/logger_useful.h>
 
 
 namespace DB
 {
-    namespace ErrorCodes
-    {
-        extern const int LOGICAL_ERROR;
-    }
+namespace ErrorCodes
+{
+    extern const int LOGICAL_ERROR;
+}
 }
 
 /** A class from which you can inherit and get a pool of something. Used for database connection pools.
@@ -30,14 +30,10 @@ public:
     using Ptr = std::shared_ptr<PoolBase<TObject>>;
 
 private:
-
     /** The object with the flag, whether it is currently used. */
     struct PooledObject
     {
-        PooledObject(ObjectPtr object_, PoolBase & pool_)
-            : object(object_), pool(pool_)
-        {
-        }
+        PooledObject(ObjectPtr object_, PoolBase & pool_) : object(object_), pool(pool_) { }
 
         ObjectPtr object;
         bool in_use = false;
@@ -69,7 +65,7 @@ public:
     public:
         friend class PoolBase<Object>;
 
-        Entry() {}    /// For deferred initialization.
+        Entry() { } /// For deferred initialization.
 
         /** The `Entry` object protects the resource from being used by another thread.
           * The following methods are forbidden for `rvalue`, so you can not write a similar to
@@ -82,10 +78,10 @@ public:
         Object & operator*() && = delete;
         const Object & operator*() const && = delete;
 
-        Object * operator->() &             { return &*data->data.object; }
+        Object * operator->() & { return &*data->data.object; }
         const Object * operator->() const & { return &*data->data.object; }
-        Object & operator*() &              { return *data->data.object; }
-        const Object & operator*() const &  { return *data->data.object; }
+        Object & operator*() & { return *data->data.object; }
+        const Object & operator*() const & { return *data->data.object; }
 
         bool isNull() const { return data == nullptr; }
 
@@ -99,10 +95,10 @@ public:
     private:
         std::shared_ptr<PoolEntryHelper> data;
 
-        Entry(PooledObject & object) : data(std::make_shared<PoolEntryHelper>(object)) {}
+        Entry(PooledObject & object) : data(std::make_shared<PoolEntryHelper>(object)) { }
     };
 
-    virtual ~PoolBase() {}
+    virtual ~PoolBase() { }
 
     /** Allocates the object. Wait for free object in pool for 'timeout'. With 'timeout' < 0, the timeout is infinite. */
     Entry get(Poco::Timespan::TimeDiff timeout)
@@ -131,32 +127,6 @@ public:
         }
     }
 
-    bool isAllFree()
-    {
-        std::unique_lock lock(mutex);
-        for (auto & item : items)
-        {
-            if (item->in_use)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    bool isAllFree()
-    {
-        std::unique_lock lock(mutex);
-        for (auto & item : items)
-        {
-            if (item->in_use)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
     void reserve(size_t count)
     {
         std::lock_guard lock(mutex);
@@ -177,16 +147,10 @@ private:
     std::condition_variable available;
 
 protected:
-
     Poco::Logger * log;
 
-    PoolBase(unsigned max_items_, Poco::Logger * log_)
-       : max_items(max_items_), log(log_)
-    {
-        items.reserve(max_items);
-    }
+    PoolBase(unsigned max_items_, Poco::Logger * log_) : max_items(max_items_), log(log_) { items.reserve(max_items); }
 
     /** Creates a new object to put into the pool. */
     virtual ObjectPtr allocObject() = 0;
 };
-
