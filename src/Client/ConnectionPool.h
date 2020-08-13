@@ -88,6 +88,11 @@ public:
         return entry;
     }
 
+    bool isAllFree()
+    {
+        return Base::isAllFree();
+    }
+
     const std::string & getHost() const
     {
         return host;
