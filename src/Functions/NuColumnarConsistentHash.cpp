@@ -73,7 +73,7 @@ public:
         return std::make_shared<NuColumnarConsistentHash>(context.getExternalDictionariesLoader());
     }
 
-    NuColumnarConsistentHash(const ExternalDictionariesLoader & dictionaries_loader_) : dictionaries_loader(dictionaries_loader_) {}
+    explicit NuColumnarConsistentHash(const ExternalDictionariesLoader & dictionaries_loader_) : dictionaries_loader(dictionaries_loader_) {}
 
     String getName() const override { return name; }
 
@@ -104,7 +104,7 @@ public:
     {
         LOG_DEBUG(log, "checking all arguments for NuColumnConsistentHash");
         // argument 'table'
-        auto& table_arg = arguments[0];
+        const auto& table_arg = arguments[0];
         const IDataType * table_arg_type = block.getByPosition(table_arg).type.get();
         // assert type for argument 'table' is String
         if(table_arg_type->getTypeId() != TypeIndex::String){
@@ -116,10 +116,10 @@ public:
         const ColumnConst * table_col_const_string = checkAndGetColumnConst<ColumnString>(table_col);
         std::string table = table_col_string ? table_col_string->getDataAt(0).toString() : table_col_const_string->getDataAt(0).toString();
         
-        LOG_DEBUG(log, "column 0: name=" << table_col->getName() << ", type=String" << ", value=" << table);
+        LOG_DEBUG(log, "column 0: name={}, type=String, value={}", table_col->getName(), table);
 
         // argument 'date'
-        auto& date_arg = arguments[1];
+        const auto& date_arg = arguments[1];
         const IDataType * date_arg_type = block.getByPosition(date_arg).type.get();        
         // assert type for argument 'date' is Date
         if (date_arg_type->getTypeId() != TypeIndex::UInt32){
@@ -128,10 +128,10 @@ public:
         }
         const IColumn * date_col = block.getByPosition(date_arg).column.get();
         const auto * date_col_val = checkAndGetColumn<ColumnUInt32>(date_col); 
-        LOG_DEBUG(log, "column 1" << ": name=" << date_col->getName() << ", type=Date" << ", value=" << date_col_val->getElement(0));
+        LOG_DEBUG(log, "column 1: name={}, type=Date, value={}", date_col->getName(), date_col_val->getElement(0));
 
         // argument "range_id"
-        auto& rangeid_arg = arguments[2];
+        const auto& rangeid_arg = arguments[2];
         const IDataType * rangeid_arg_type = block.getByPosition(rangeid_arg).type.get();        
         // assert type for argument 'range_id' is UInt32
         if (rangeid_arg_type->getTypeId() != TypeIndex::UInt32){
@@ -140,7 +140,7 @@ public:
         }
         const IColumn * rangeid_col = block.getByPosition(rangeid_arg).column.get();
         const auto * rangeid_col_val = checkAndGetColumn<ColumnUInt32>(rangeid_col); 
-        LOG_DEBUG(log, "column 2" << ": name=" << rangeid_col->getName() << ", type=UInt32" << ", value=" << rangeid_col_val->getElement(0));
+        LOG_DEBUG(log, "column 2: name={}, type=UInt32, value={}", rangeid_col->getName(), rangeid_col_val->getElement(0));
 
         UInt32 shard = lookupShard(table, date_col_val->getElement(0), rangeid_col_val->getElement(0));
         
@@ -176,9 +176,8 @@ private:
         return (*shard - 1);
     }
 
-private:
     const ExternalDictionariesLoader & dictionaries_loader;
-    Poco::Logger * log = &Poo::Logger::get("NuColumnarConsistentHash");
+    Poco::Logger * log = &Poco::Logger::get("NuColumnarConsistentHash");
 };
 
 
@@ -233,7 +232,7 @@ public:
         }
         auto found = std::lower_bound(hash_ranges.begin(), hash_ranges.end(), combinedHash);
         std::size_t bucketIdx = found-hash_ranges.begin()+1;
-        LOG_DEBUG(log, "Combined hash= " << combinedHash  << ", bucket index=" << bucketIdx);
+        LOG_DEBUG(log, "Combined hash= {}, bucket index={}", combinedHash, bucketIdx);
 
         auto c_res = ColumnUInt32::create();
         auto & data = c_res->getData();
@@ -255,34 +254,34 @@ public:
                 {
                     const UInt8& v_uint8 = checkAndGetColumn<ColumnUInt8>(c)->getElement(0);
                     boost::hash_combine(seed, static_cast<unsigned char>(v_uint8));
-                    LOG_DEBUG(log, "Column " << i  << ": name=" << c->getName() << ", type=" << getTypeName(which.idx) << ", value=" << v_uint8 << ", hash=" << seed);
+                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={}, hash={%d}", i, c->getName(), getTypeName(which.idx), v_uint8,   seed);
                     break;
                 }
                 case TypeIndex::Int8:
                 {
                     const Int8& v_int8 = checkAndGetColumn<ColumnInt8>(c)->getElement(0);
                     boost::hash_combine(seed, v_int8);
-                    LOG_DEBUG(log, "Column " << i  << ": name=" << c->getName() << ", type=" << getTypeName(which.idx) << ", value=" << v_int8 << ", hash=" << seed);
+                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={}, hash={%c}", i, c->getName(), getTypeName(which.idx), v_int8,   seed);
                     break;
                 }
                 case TypeIndex::Int64:
                 {
                     const Int64& v_int64 = checkAndGetColumn<ColumnInt64>(c)->getElement(0);
                     boost::hash_combine(seed, v_int64);
-                    LOG_DEBUG(log, "Column " << i  << ": name=" << c->getName() << ", type=" << getTypeName(which.idx) << ", value=" << v_int64 << ", hash=" << seed);
+                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={}, hash={ld}", i, c->getName(), getTypeName(which.idx), v_int64, seed);
                     break;
                 }
                 case TypeIndex::String:
                 {
                     const ColumnString* val = checkAndGetColumn<ColumnString>(c);
                     std::string v_str = val->getDataAt(0).toString();
-                    LOG_DEBUG(log, "Column " << i  << ": name=" << c->getName() << ", type=" << getTypeName(which.idx) << ", value=" << v_str << ", hash=" << seed);
+                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={}, hash={}", i, c->getName(), getTypeName(which.idx), v_str, seed);
                     boost::hash_combine(seed, v_str);
                     break;
                 }
                 default:
                 {
-                    LOG_DEBUG(log, "Skipping column " << i  << ": name=" << c->getName() << ", type=" << getTypeName(which.idx));
+                    LOG_DEBUG(log, "Skipping column {%ld}: name={}, type={%s}", i, c->getName(), getTypeName(which.idx));
                     break;
                 }
             }
@@ -291,7 +290,7 @@ public:
     }
 
 private:
-    Logger * log = &Logger::get("NuColumnarHashRange");
+    Poco::Logger * log = &Poco::Logger::get("NuColumnarHashRange");
     static std::size_t unit_range;
     // 16 buckets for search
     static std::vector<std::size_t> hash_ranges;
