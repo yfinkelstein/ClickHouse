@@ -4,6 +4,7 @@
 #include <vector>
 #include <variant>
 #include <cstdint>
+#include <atomic>
 
 #include <Core/Block.h>
 #include <Core/Defines.h>

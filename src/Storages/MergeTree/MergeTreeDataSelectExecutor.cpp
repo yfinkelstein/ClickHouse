@@ -256,11 +256,11 @@ bool MergeTreeDataSelectExecutor::shouldSkipPartition(const Context & context, c
     std::optional<UInt32> shardId = ReshardingUtils::findShardIfExists(context.getExternalDictionariesLoader(), table, std::stoi(date), std::stoi(rangeId), activeVerColumn);
 
     if(!shardId){
-        LOG_DEBUG(log, "shard not found for {table: " << table << ", date" << date << ", range_id" << rangeId << ", activeVerColumn: " << activeVerColumn << "}");
+        LOG_DEBUG(log, "shard not found for {table: {} date {}, range_id {}, activeVerColumn {} }", *shardId, table, date, rangeId, activeVerColumn);
         return false;
     }
 
-    LOG_DEBUG(log, "Found shard: " << *shardId << " for {table: " << table << ", date" << date << ", range_id" << rangeId << ", activeVerColumn: " << activeVerColumn << "}");
+    LOG_DEBUG(log, "Found shard: {} for {table: {} date {}, range_id {}, activeVerColumn {} }", *shardId, table, date, rangeId, activeVerColumn);
 
     return selfShard != *shardId;
 }
@@ -387,7 +387,7 @@ Pipes MergeTreeDataSelectExecutor::readFromParts(
     // parse required sharding version and table name
     std::optional<std::pair<std::string, std::string>> requiredPartitionVer = getRequiredShardingVerIfExists(query_info);
     if(requiredPartitionVer){
-        LOG_DEBUG(log, "Required partiton version: " << (*requiredPartitionVer).first << ", table: " << (*requiredPartitionVer).second);          
+        LOG_DEBUG(log, "Required partiton version: {}, table: {}", (*requiredPartitionVer).first, (*requiredPartitionVer).second);          
     }
     /// Select the parts in which there can be data that satisfy `minmax_idx_condition` and that match the condition on `_part`,
     ///  as well as `max_block_number_to_read`.
@@ -417,9 +417,9 @@ Pipes MergeTreeDataSelectExecutor::readFromParts(
             // skip partitions which are not required by current global version
             if(requiredPartitionVer){
                 std::string partitionId = part->info.partition_id;
-                LOG_DEBUG(log, "Examining part: " << part->name << " of partition : {}", partitionId);
+                LOG_DEBUG(log, "Examining part: {} of partition : {}", part->name, partitionId);
                 if(shouldSkipPartition(context, (*requiredPartitionVer).first, (*requiredPartitionVer).second, partitionId)){
-                    LOG_DEBUG(log, "Skipping part: " << part->name << " of partition : {}", partitionId);
+                    LOG_DEBUG(log, "Skipping part: {} of partition : {}", part->name, partitionId);
                     continue;
                 }
             } 

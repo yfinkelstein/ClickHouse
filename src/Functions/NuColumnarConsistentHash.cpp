@@ -178,7 +178,7 @@ private:
 
 private:
     const ExternalDictionariesLoader & dictionaries_loader;
-    Logger * log = &Logger::get("NuColumnarConsistentHash");
+    Poco::Logger * log = &Poo::Logger::get("NuColumnarConsistentHash");
 };
 
 

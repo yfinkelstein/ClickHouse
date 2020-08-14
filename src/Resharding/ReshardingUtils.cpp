@@ -16,7 +16,7 @@ std::optional<std::string> ReshardingUtils::findActiveShardingVersionIfExists(co
     try{
         partition_ver_dict = dictionaries_loader.getDictionary(_SHARDING_VERSION_DICTIONARY);
     }catch(const DB::Exception& ex){
-        LOG_DEBUG(&Logger::get("ReshardingUtils"), ex.what());
+        LOG_DEBUG(&Poco::Logger::get("ReshardingUtils"), ex.what());
         return std::nullopt;
     }
 
@@ -56,7 +56,7 @@ std::optional<std::string> ReshardingUtils::findActiveShardingVersionIfExists(co
     std::string active_ver = out->getDataAt(0).toString();
 
     if(active_ver.empty()){
-        LOG_WARNING(&Logger::get("ReshardingUtils"), "active _sharding_ver not found for {table: " << db_table_name << ", date: 00000000, range_id: 0}");
+        LOG_WARNING(&Poco::Logger::get("ReshardingUtils"), "active _sharding_ver not found for {table: {}, date: 00000000, range_id: 0}", db_table_name);
         return std::nullopt;
     }
 
