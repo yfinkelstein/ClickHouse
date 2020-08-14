@@ -1,0 +1,69 @@
+-DBOOST_ALL_NO_LIB 
+-DBOOST_FILESYSTEM_DYN_LINK 
+-DBOOST_PROGRAM_OPTIONS_DYN_LINK 
+-DBOOST_SYSTEM_DYN_LINK 
+-DENABLE_MULTITARGET_CODE=1 
+-DLZ4_DISABLE_DEPRECATE_WARNINGS=1 
+-DPOCO_ENABLE_CPP11 
+-DPOCO_HAVE_FD_POLL 
+-DPOCO_OS_FAMILY_UNIX 
+-DUNALIGNED_OK 
+-DUSE_FASTMEMCPY=0 
+-DUSE_HYPERSCAN=1 
+-DUSE_REPLXX=1 
+-DUSE_XXHASH=1 
+-DWITH_COVERAGE=0 
+-DWITH_GZFILEOP 
+-DX86_64 
+-DZLIB_COMPAT 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/cmake-build-debug/includes/configs 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/cityhash102/include 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/libfarmhash 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/consistent-hashing 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/consistent-hashing-sumbur 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/src 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/cmake-build-debug/src 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/src/Core/include 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/AMQP-CPP/include 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/base 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/base/mysqlxx
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/base/common
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/cctz/include 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/zlib-ng 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/zlib-ng 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/base/pcg-random
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/libuv/include 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/libmetrohash/src 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/murmurhash/include 
+-I/Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/lz4/lib 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/sparsehash-c11 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/h3/src/h3lib/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/libcxx/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/libcxxabi/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/base64 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/orc/c++/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/orc/c++/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/pdqsort 
+-isystem /usr/local/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/poco/Net/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/poco/Foundation/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/poco/NetSSL_OpenSSL/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/poco/Crypto/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/poco/Util/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/poco/JSON/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/poco/XML/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/replxx/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/fmtlib-cmake/../fmtlib/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/msgpack-c/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/re2 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/double-conversion 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/ryu -isystem contrib/re2_st 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/croaring 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/libdivide/. 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/h3/src/h3lib/include 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/hyperscan/src 
+-isystem /Users/yfinkelstein/nudata/mib/nucolumnar/.deps/deps_build/ClickHouse-resharding-support2/contrib/simdjson/include 
+-I/usr/local/opt/openssl/include 
+-fdiagnostics-color=always -std=c++2a -fsized-deallocation  -gdwarf-aranges -msse4.1 -msse4.2 -mpopcnt   -Wall -Wno-unused-command-line-argument  -stdlib=libc++ -fdiagnostics-absolute-paths -mmacosx-version-min=10.15 -Wextra -Wpedantic -Wno-vla-extension -Wno-zero-length-array -Wcomma -Wconditional-uninitialized -Wcovered-switch-default -Wdeprecated -Wembedded-directive -Wempty-init-stmt -Wextra-semi-stmt -Wextra-semi -Wgnu-case-range -Winconsistent-missing-destructor-override -Wnewline-eof -Wold-style-cast -Wrange-loop-analysis -Wredundant-parens -Wreserved-id-macro -Wshadow-field -Wshadow-uncaptured-local -Wshadow -Wstring-plus-int -Wundef -Wunreachable-code-return -Wunreachable-code -Wunused-exception-parameter -Wunused-macros -Wunused-member-function -Wzero-as-null-pointer-constant -Weverything -Wno-c++98-compat-pedantic -Wno-c++98-compat -Wno-c99-extensions -Wno-conversion -Wno-ctad-maybe-unsupported -Wno-deprecated-dynamic-exception-spec -Wno-disabled-macro-expansion -Wno-documentation-unknown-command -Wno-double-promotion -Wno-exit-time-destructors -Wno-float-equal -Wno-global-constructors -Wno-missing-prototypes -Wno-missing-variable-declarations -Wno-nested-anon-types -Wno-packed -Wno-padded -Wno-return-std-move-in-c++11 -Wno-shift-sign-overflow -Wno-sign-conversion -Wno-switch-enum -Wno-undefined-func-template -Wno-unused-template -Wno-vla -Wno-weak-template-vtables -Wno-weak-vtables -g -O0 -g3 -ggdb3 -fno-inline  -D_LIBCPP_DEBUG=0 
+-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk   
+-D OS_DARWIN -nostdinc++ -Wno-old-style-cast -Wno-inconsistent-missing-destructor-override -Wno-deprecated -Wno-unused-parameter -Wno-shadow -Wno-tautological-type-limit-compare -Wno-extra-semi -w -MD -MT
