@@ -254,21 +254,21 @@ public:
                 {
                     const UInt8& v_uint8 = checkAndGetColumn<ColumnUInt8>(c)->getElement(0);
                     boost::hash_combine(seed, static_cast<unsigned char>(v_uint8));
-                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={}, hash={%d}", i, c->getName(), getTypeName(which.idx), v_uint8,   seed);
+                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={%ud}, hash={}", i, c->getName(), getTypeName(which.idx), v_uint8,   seed);
                     break;
                 }
                 case TypeIndex::Int8:
                 {
                     const Int8& v_int8 = checkAndGetColumn<ColumnInt8>(c)->getElement(0);
                     boost::hash_combine(seed, v_int8);
-                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={}, hash={%c}", i, c->getName(), getTypeName(which.idx), v_int8,   seed);
+                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={%d}, hash={}", i, c->getName(), getTypeName(which.idx), v_int8,   seed);
                     break;
                 }
                 case TypeIndex::Int64:
                 {
                     const Int64& v_int64 = checkAndGetColumn<ColumnInt64>(c)->getElement(0);
                     boost::hash_combine(seed, v_int64);
-                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={}, hash={ld}", i, c->getName(), getTypeName(which.idx), v_int64, seed);
+                    LOG_DEBUG(log, "Column {%ld}: name={}, type={%s}, value={%ld}, hash={}", i, c->getName(), getTypeName(which.idx), v_int64, seed);
                     break;
                 }
                 case TypeIndex::String:
