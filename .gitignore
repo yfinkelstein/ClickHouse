@@ -52,7 +52,7 @@ cmake_install.cmake
 CTestTestfile.cmake
 *.a
 *.o
-cmake-build-*
+cmake-build*
 
 # Python cache
 *.pyc
